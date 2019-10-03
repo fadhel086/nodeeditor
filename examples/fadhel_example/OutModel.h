@@ -25,17 +25,18 @@ class OutModel : public NodeDataModel
     : _lineEdit(new QLineEdit())
     {
       _lineEdit->setMaximumSize(_lineEdit->sizeHint());
-
       _lineEdit->setText("");
     }
   
   ~OutModel() {};
 
+  // Caption displayed in the GUI Node
   QString caption() const override
   {
     return QString("Output string");
   }
 
+  // Name displayed upon left-click
   QString name() const override
   {
     return QString("Out string in small");
@@ -61,14 +62,15 @@ class OutModel : public NodeDataModel
 
     return result;
   }
- 
+
+  // Sets the Node Type as id and name appears in the GUI Node.
   NodeDataType dataType(PortType portType, PortIndex portIndex) const override
   {
     // Node out dataType {id, name}
     return StringData().type();
   }
 
-  // Triggers the algorithm
+  // Triggers the algorithm, for processing the received inputs
   void setInData(std::shared_ptr<NodeData> nodedata, int index) override
   {
     _nodeData = nodedata;
@@ -80,17 +82,20 @@ class OutModel : public NodeDataModel
       }
   }
 
+  // Should be sending a pointer to next node, When Q_EMIT dataUpdated(port) is called.
   std::shared_ptr<NodeData> outData(PortIndex port) override
   {
     //return std::make_shared<StringData>(_data);
   }
 
+  // Enters here on events, filter the events and do the required processing.
   bool eventFilter(QObject *object, QEvent *event)
   {
     // No event
     return true;
   }
 
+  // Embed a Widget inside the Node.
   QWidget* embeddedWidget() override {return _lineEdit;}
 
   bool resizable() const override {return true;}
